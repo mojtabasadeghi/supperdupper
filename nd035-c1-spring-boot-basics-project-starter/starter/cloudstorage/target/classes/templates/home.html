@@ -84,9 +84,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="note1 : ${notes}">
+                                    <tr th:each="note1 : ${noteslist}">
                                         <td>
-                                            <button type="button" class="btn btn-success" >Edit</button>
+                                            <button type="button" class="btn btn-success"  th:attr="data-id=${note1.noteid},data-title=${note1.notetitle},data-notedescription=${note1.notedescription}" onclick="myfunction(this)">Edit</button>
                                             <a class="btn btn-danger" th:href="${'/home/note/delete/'+note1.noteid}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note1.notetitle}">Example Note Title</th>
@@ -110,11 +110,12 @@
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
-                                                <input type="text" name= "noteTitle" class="form-control" id="note-title" maxlength="20" required >
+                                                <input type="text" name="notetitle" th:field="*{notetitle}" class="form-control" id="note-title" maxlength="20" required >
                                             </div>
                                             <div class="form-group">
+                                                <input type="hidden" id="noteinsorupd" th:field="*{noteinsorupd}"/>
                                                 <label for="note-description" class="col-form-label">Description</label>
-                                                <textarea class="form-control" name="noteDescription"  id="note-description" rows="5" maxlength="1000" required ></textarea>
+                                                <textarea class="form-control" name="notedescription" th:field="*{notedescription}" id="note-description" rows="5" maxlength="1000" required ></textarea>
                                             </div>
                                             <button id="noteSubmit" type="submit" class="d-none"></button>
                                         </form>
@@ -133,7 +134,7 @@
                         </button>
 
                         <div class="table-responsive">
-                            <table class="table table-striped" th:object="${credentials}" id="credentialTable">
+                            <table class="table table-striped"  id="credentialTable">
                                 <thead>
                                     <tr>
                                         <th style="width: 20%" scope="col"></th>
@@ -143,14 +144,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="creden : ${credentialsList}">
                                     <td>
                                         <button type="button" class="btn btn-success">Edit</button>
                                         <a class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
-                                    <td>Example Credential Username</td>
-                                    <td>Example Credential Password</td>
+                                    <th scope="row" th:text="${creden.url}">Example Credential URL</th>
+                                    <td th:text="${creden.username}">Example Credential Username</td>
+                                    <td th:text="${creden.password}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -206,6 +207,7 @@
                 $('#note-id').val(noteId ? noteId : '');
                 $('#note-title').val(noteTitle ? noteTitle : '');
                 $('#note-description').val(noteDescription ? noteDescription : '');
+                $('#noteinsorupd').val('0');
                 $('#noteModal').modal('show');
             }
 
@@ -215,7 +217,19 @@
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');
+
                 $('#credentialModal').modal('show');
+            }
+
+            function myfunction(e) {
+               //showNoteModal($('#nid').value(),$('#ntitle').value(),$('#ndescription').value()) ;
+
+
+                $('#note-id').val(e.getAttribute("data-id"));
+                $('#note-title').val(e.getAttribute("data-title"));
+                $('#note-description').val(e.getAttribute("data-notedescription"));
+                $('#noteinsorupd').val(e.getAttribute("data-id"));
+                $('#noteModal').modal('show');
             }
         </script>
     </body>

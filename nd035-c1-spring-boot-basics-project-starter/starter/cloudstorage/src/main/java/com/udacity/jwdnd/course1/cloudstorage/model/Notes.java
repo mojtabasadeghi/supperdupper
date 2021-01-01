@@ -5,6 +5,15 @@ public class Notes {
     private String notetitle;
     private String notedescription;
     private Integer fk_userid;
+    private String noteinsorupd;
+
+    public String getNoteinsorupd() {
+        return noteinsorupd;
+    }
+
+    public void setNoteinsorupd(String noteinsorupd) {
+        this.noteinsorupd = noteinsorupd;
+    }
 
     public Notes(Integer noteid, String notetitle, String notedescription, Integer fk_userid) {
         this.noteid = noteid;

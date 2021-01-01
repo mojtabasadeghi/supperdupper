@@ -6,7 +6,30 @@ public class Credentials {
     private String username;
     private String key;
     private String password;
+    private String decryptedPassword;
     private Integer fk_userid;
+
+    public Credentials( String url, String username, String key, String password, Integer fk_userid) {
+
+        this.url = url;
+        this.username = username;
+        this.key = key;
+        this.password = password;
+        this.fk_userid = fk_userid;
+    }
+
+    public Credentials() {
+    }
+
+    public String getDecryptedPassword() {
+        return decryptedPassword;
+    }
+
+    public void setDecryptedPassword(String decryptedPassword) {
+        this.decryptedPassword = decryptedPassword;
+    }
+
+
 
     public Integer getCredentialid() {
         return credentialid;
