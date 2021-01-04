@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 
@@ -23,11 +25,13 @@ public class FileSystemStorageService implements StorageService {
 
     FileMapper fileMapper;
     private final Path rootLocation;
+    private UserService userService;
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties,FileMapper fileMapper) {
+    public FileSystemStorageService(StorageProperties properties,FileMapper fileMapper,UserService userService) {
         this.rootLocation = Paths.get(properties.getLocation());
         this.fileMapper=fileMapper;
+        this.userService=userService;
     }
 
     @Override
@@ -66,9 +70,9 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public List<File> loadAllFile()
+    public List<File> loadAllFile(Authentication authentication)
     {
-        return fileMapper.getAllfiles();
+        return fileMapper.getAllfiles(userService.getUser(authentication.getName()).getUserId());
     }
 
     @Override

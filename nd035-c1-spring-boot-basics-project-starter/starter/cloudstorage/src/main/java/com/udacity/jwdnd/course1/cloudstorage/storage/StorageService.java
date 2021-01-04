@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.storage;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -15,7 +16,7 @@ public interface StorageService {
 
     void store(MultipartFile file,int userid);
 
-    List<File> loadAllFile();
+    List<File> loadAllFile(Authentication authentication);
 
 
     Stream<Path> loadAll();

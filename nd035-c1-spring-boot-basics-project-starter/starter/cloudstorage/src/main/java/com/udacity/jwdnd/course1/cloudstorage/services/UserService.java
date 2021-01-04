@@ -26,6 +26,7 @@ public class UserService {
         this.credentialsMapper=credentialsMapper;
     }
 
+
     public boolean isUsernameAvailable(String username) {
         return userMapper.getUser(username) == null;
     }
@@ -35,19 +36,16 @@ public class UserService {
         byte[] salt = new byte[16];
         random.nextBytes(salt);
         String encodedSalt = Base64.getEncoder().encodeToString(salt);
-       // String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
-        String encyptedPassword=encryptionService.encryptValue(user.getPassword(),encodedSalt);
-        user.setSalt(encodedSalt);
-        user.setPassword(encyptedPassword);
+        String hashedPassword = encryptionService.encryptValue(user.getPassword(), encodedSalt);
+        User insUser=new User(null, user.getUsername(), encodedSalt, hashedPassword, user.getFirstName(), user.getLastName());
+        int retusr= userMapper.insert(insUser);
+/*
+        Optional<User> usr =Optional.of(insUser);
+        int retcred=credentialsMapper.insertCredentials(new Credentials("",user.getUsername(),encodedSalt,hashedPassword,usr.get().getUserId()));
+*/
 
-       // int fk_userid=userMapper.insert(new User(null, user.getUsername(), encodedSalt, encyptedPassword, user.getFirstName(), user.getLastName()));
 
-        int vlueInsertedOrNot=userMapper.insert(user);
-        Optional<User> usr =Optional.of(user);
-        int vlueCredential=credentialsMapper.insertCredentials(new Credentials("",user.getUsername(),encodedSalt,encyptedPassword,usr.get().getUserId()));
-       // return userMapper.insert(new User(null, user.getUsername(), encodedSalt, hashedPassword, user.getFirstName(), user.getLastName()));
-
-        return vlueInsertedOrNot;
+        return retusr;
     }
 
     public User getUser(String username) {

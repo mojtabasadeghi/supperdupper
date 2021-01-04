@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import ch.qos.logback.core.hook.DelayingShutdownHook;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Notes;
@@ -40,7 +41,7 @@ public class HomeController {
         return "home";
     }
     @PostMapping("/note")
-    public String insOrPpdNote(Authentication authentication,  Notes noteFromHome)
+    public String insOrUppdNote(Authentication authentication,  Notes noteFromHome)
     {
         try {
             if(Integer.parseInt(noteFromHome.getNoteinsorupd()) >0)
@@ -57,6 +58,15 @@ public class HomeController {
         }
 
     }
+    @PostMapping("/credential")
+    public String insOrUpdcredential(Authentication authentication,  Credentials credentialsPost)
+    {
+        if (Integer.parseInt(credentialsPost.getCredentialInsOrUpd())>0)
+            credentialsService.updateCredential(credentialsPost,Integer.parseInt(credentialsPost.getCredentialInsOrUpd()),userService.getUser(authentication.getName()).getUserId());
+        else
+            credentialsService.insCredentials(authentication, credentialsPost);
+        return "redirect:/home";
+    }
 
     @ModelAttribute("credentialsList")
     public List<Credentials> allCredentials(Authentication authentication)
@@ -64,15 +74,17 @@ public class HomeController {
         return credentialsService.getAllCredentials(authentication.getName());
     }
 
+    @ModelAttribute("credentialsPost")
+    public Credentials setFormCredentials(){return new Credentials();}
     @ModelAttribute("noteslist")
-    public List<Notes> allNotes()
+    public List<Notes> allNotes(Authentication authentication)
     {
-        return noteService.loadAllNotes();
+        return noteService.loadAllNotes(authentication);
     }
     @ModelAttribute("files")
-    public List<File> allFiles()
+    public List<File> allFiles(Authentication authentication)
     {
-        return storageService.loadAllFile();
+        return storageService.loadAllFile(authentication);
     }
 
     @ModelAttribute("noteFromHome")
@@ -86,12 +98,16 @@ public class HomeController {
 
 
     @GetMapping("/note/delete/{id}")
-    public String deleteFile(@PathVariable int id,Model model) {
+    public String deleteNote(@PathVariable int id) {
 
         noteService.delNote(id);
         return "redirect:/home";
     }
-
+    @GetMapping("/credential/delete/{id}")
+    public String deletecredential(@PathVariable int id) {
+        credentialsService.delCredentials(id);
+        return "redirect:/home";
+    }
 
 
 

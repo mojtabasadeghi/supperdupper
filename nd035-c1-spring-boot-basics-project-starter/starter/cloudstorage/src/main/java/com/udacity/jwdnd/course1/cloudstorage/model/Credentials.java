@@ -8,8 +8,17 @@ public class Credentials {
     private String password;
     private String decryptedPassword;
     private Integer fk_userid;
+    private String credentialInsOrUpd;
 
-    public Credentials( String url, String username, String key, String password, Integer fk_userid) {
+    public String getCredentialInsOrUpd() {
+        return credentialInsOrUpd;
+    }
+
+    public void setCredentialInsOrUpd(String credentialInsOrUpd) {
+        this.credentialInsOrUpd = credentialInsOrUpd;
+    }
+
+    public Credentials(String url, String username, String key, String password, Integer fk_userid) {
 
         this.url = url;
         this.username = username;

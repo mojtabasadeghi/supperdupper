@@ -12,7 +12,7 @@
         <div class="container">
             <div id="logoutDiv">
                 <form action="#" th:action="@{/logout}" method="POST">
-                    <button type="submit" class="btn btn-secondary float-right" >Logout</button>
+                    <button type="submit" id="logoutbtn" class="btn btn-secondary float-right" >Logout</button>
                 </form>
             </div>
             <div id="contentDiv" style="clear: right;">
@@ -36,7 +36,7 @@
                                             <input type="file" class="form-control-file" id="fileUpload" name="fileUpload">
                                         </div>
                                         <div class="col-sm-4">
-                                            <button type="submit" class="btn btn-dark">Upload</button>
+                                            <button type="submit" class="btn btn-dark" id="uploadBtn">Upload</button>
                                         </div>
 
                                 </div>
@@ -70,7 +70,7 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
+                        <button style="margin: 0.25em;" type="button" id="add-new-note" class="btn btn-info float-right" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
 
@@ -86,10 +86,10 @@
                                 <tbody>
                                     <tr th:each="note1 : ${noteslist}">
                                         <td>
-                                            <button type="button" class="btn btn-success"  th:attr="data-id=${note1.noteid},data-title=${note1.notetitle},data-notedescription=${note1.notedescription}" onclick="myfunction(this)">Edit</button>
+                                            <button type="button" class="btn btn-success"  th:attr="data-id=${note1.noteid},data-title=${note1.notetitle},data-notedescription=${note1.notedescription}" onclick="myNotefunction(this)">Edit</button>
                                             <a class="btn btn-danger" th:href="${'/home/note/delete/'+note1.noteid}">Delete</a>
                                         </td>
-                                        <th scope="row" th:text="${note1.notetitle}">Example Note Title</th>
+                                        <th scope="row"  th:text="${note1.notetitle}">Example Note Title</th>
                                         <td th:text="${note1.notedescription}">Example Note Description </td>
                                     </tr>
                                 </tbody>
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
+                        <button style="margin: 0.25em;" type="button" id="add-new-credential" class="btn btn-info float-right" onclick="showCredentialModal()">
                             + Add a New Credential
                         </button>
 
@@ -146,12 +146,15 @@
                                 <tbody>
                                 <tr th:each="creden : ${credentialsList}">
                                     <td>
-                                        <button type="button" class="btn btn-success">Edit</button>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <button type="button" class="btn btn-success" th:attr="data-id=${creden.credentialid},data-url=${creden.url},data-username=${creden.username},data-decryptedpassword=${creden.decryptedPassword}"  onclick="MyCredentialfunction(this)">Edit</button>
+                                        <a class="btn btn-danger" th:href="${'/home/credential/delete/'+creden.credentialid}">Delete</a>
+
                                     </td>
                                     <th scope="row" th:text="${creden.url}">Example Credential URL</th>
                                     <td th:text="${creden.username}">Example Credential Username</td>
                                     <td th:text="${creden.password}">Example Credential Password</td>
+
+
                                 </tr>
                                 </tbody>
                             </table>
@@ -167,19 +170,20 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
+                                        <form action="#" th:action="@{/home/credential}" th:object="${credentialsPost}" method="POST">
                                             <input type="hidden" name="credentialId" id="credential-id">
                                             <div class="form-group">
-                                                <label for="note-title" class="col-form-label">URL</label>
-                                                <input type="text" name= "url" class="form-control" id="credential-url" maxlength="100" required>
+                                                <input type="hidden" id="credentialInsOrUpd" th:field="*{credentialInsOrUpd}"/>
+                                                <label for="note-title" class="col-form-label" >URL</label>
+                                                <input type="text" name= "url" th:field="*{url}" class="form-control" id="credential-url" maxlength="100" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Username</label>
-                                                <input type="text" name= "username" class="form-control" id="credential-username" maxlength="30" required>
+                                                <input type="text" name= "username" th:field="*{username}" class="form-control" id="credential-username" maxlength="30" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Password</label>
-                                                <input type="text" name= "password" class="form-control" id="credential-password" maxlength="30" required>
+                                                <input type="text" name= "password" th:field="*{password}" class="form-control" id="credential-password" maxlength="30" required>
                                             </div>
                                             <button id="credentialSubmit" type="submit" class="d-none"></button>
                                         </form>
@@ -217,19 +221,27 @@
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');
-
+                $('#credentialInsOrUpd').val('0');
                 $('#credentialModal').modal('show');
             }
 
-            function myfunction(e) {
+            function myNotefunction(e) {
                //showNoteModal($('#nid').value(),$('#ntitle').value(),$('#ndescription').value()) ;
-
-
                 $('#note-id').val(e.getAttribute("data-id"));
                 $('#note-title').val(e.getAttribute("data-title"));
                 $('#note-description').val(e.getAttribute("data-notedescription"));
                 $('#noteinsorupd').val(e.getAttribute("data-id"));
                 $('#noteModal').modal('show');
+            }
+
+            function MyCredentialfunction(e) {
+
+                $('#credential-id').val(e.getAttribute("data-id") ? e.getAttribute("data-id") : '');
+                $('#credential-url').val(e.getAttribute("data-url") ? e.getAttribute("data-url") : '');
+                $('#credential-username').val(e.getAttribute("data-username") ? e.getAttribute("data-username") : '');
+                $('#credential-password').val(e.getAttribute("data-decryptedpassword")? e.getAttribute("data-decryptedpassword") : '');
+                $('#credentialInsOrUpd').val(e.getAttribute("data-id"));
+                $('#credentialModal').modal('show');
             }
         </script>
     </body>
