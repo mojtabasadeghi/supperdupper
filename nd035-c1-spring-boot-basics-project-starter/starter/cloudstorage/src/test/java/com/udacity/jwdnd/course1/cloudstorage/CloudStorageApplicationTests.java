@@ -77,8 +77,11 @@ class CloudStorageApplicationTests {
 		loginPage.login(user);
 
 
+
 		HomePage homePage =new HomePage(driver);
-		homePage.logOut();
+		wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getlogoutbtn())).click();
+		//homePage.logOut();
 		//driver.get(baseURL+"/login");
 
 
