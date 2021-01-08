@@ -22,6 +22,11 @@ public class Notes {
         this.fk_userid = fk_userid;
     }
 
+    public Notes( String notetitle, String notedescription) {
+        this.notetitle = notetitle;
+        this.notedescription = notedescription;
+    }
+
     public Notes() {
     }
 

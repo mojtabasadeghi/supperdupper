@@ -86,11 +86,11 @@
                                 <tbody>
                                     <tr th:each="note1 : ${noteslist}">
                                         <td>
-                                            <button type="button" class="btn btn-success"  th:attr="data-id=${note1.noteid},data-title=${note1.notetitle},data-notedescription=${note1.notedescription}" onclick="myNotefunction(this)">Edit</button>
-                                            <a class="btn btn-danger" th:href="${'/home/note/delete/'+note1.noteid}">Delete</a>
+                                            <button type="button" class="btn btn-success" id="edit-note"  th:attr="data-id=${note1.noteid},data-title=${note1.notetitle},data-notedescription=${note1.notedescription}" onclick="myNotefunction(this)">Edit</button>
+                                            <a class="btn btn-danger" id="delete-note" th:href="${'/home/note/delete/'+note1.noteid}">Delete</a>
                                         </td>
-                                        <th scope="row"  th:text="${note1.notetitle}">Example Note Title</th>
-                                        <td th:text="${note1.notedescription}">Example Note Description </td>
+                                        <th scope="row" id="note-title-record"  th:text="${note1.notetitle}">Example Note Title</th>
+                                        <td id="note-description-record" th:text="${note1.notedescription}">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -122,7 +122,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
+                                        <button type="button" class="btn btn-primary" id="noteSubmit-javascript"  onclick="$('#noteSubmit').click();">Save changes</button>
                                     </div>
                                 </div>
                             </div>
@@ -146,11 +146,11 @@
                                 <tbody>
                                 <tr th:each="creden : ${credentialsList}">
                                     <td>
-                                        <button type="button" class="btn btn-success" th:attr="data-id=${creden.credentialid},data-url=${creden.url},data-username=${creden.username},data-decryptedpassword=${creden.decryptedPassword}"  onclick="MyCredentialfunction(this)">Edit</button>
-                                        <a class="btn btn-danger" th:href="${'/home/credential/delete/'+creden.credentialid}">Delete</a>
+                                        <button type="button" class="btn btn-success" th:id="${'credentialEditId'+creden.credentialid}" th:attr="data-id=${creden.credentialid},data-url=${creden.url},data-username=${creden.username},data-decryptedpassword=${creden.decryptedPassword},data-password=${creden.password},data-key=${creden.key}"  onclick="MyCredentialfunction(this)">Edit</button>
+                                        <a class="btn btn-danger" id="delete-credential" th:href="${'/home/credential/delete/'+creden.credentialid}">Delete</a>
 
                                     </td>
-                                    <th scope="row" th:text="${creden.url}">Example Credential URL</th>
+                                    <th scope="row"  th:text="${creden.url}">Example Credential URL</th>
                                     <td th:text="${creden.username}">Example Credential Username</td>
                                     <td th:text="${creden.password}">Example Credential Password</td>
 
@@ -189,8 +189,8 @@
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" id="credential-Close-btn-EditMode" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="credentialSubmit-javascript" onclick="$('#credentialSubmit').click();">Save changes</button>
                                     </div>
                                 </div>
                             </div>
@@ -237,11 +237,19 @@
             function MyCredentialfunction(e) {
 
                 $('#credential-id').val(e.getAttribute("data-id") ? e.getAttribute("data-id") : '');
-                $('#credential-url').val(e.getAttribute("data-url") ? e.getAttribute("data-url") : '');
+                $('#credential-url').attr("urlResult" ,(e.getAttribute("data-url") ? e.getAttribute("data-url") : ''));
+                $('#credential-username').attr("usernameResult",(e.getAttribute("data-username") ? e.getAttribute("data-username") : ''));
+                $('#credential-password').attr("decryptPasswprdResult",(e.getAttribute("data-decryptedpassword")? e.getAttribute("data-decryptedpassword") : ''));
+
+                $('#credential-url').val(e.getAttribute("data-url") ? e.getAttribute("data-url"): '');
                 $('#credential-username').val(e.getAttribute("data-username") ? e.getAttribute("data-username") : '');
                 $('#credential-password').val(e.getAttribute("data-decryptedpassword")? e.getAttribute("data-decryptedpassword") : '');
                 $('#credentialInsOrUpd').val(e.getAttribute("data-id"));
+
+
                 $('#credentialModal').modal('show');
+
+
             }
         </script>
     </body>

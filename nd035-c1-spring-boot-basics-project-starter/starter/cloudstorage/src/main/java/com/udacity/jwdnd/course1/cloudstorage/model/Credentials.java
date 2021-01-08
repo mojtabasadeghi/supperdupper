@@ -27,6 +27,18 @@ public class Credentials {
         this.fk_userid = fk_userid;
     }
 
+    public Credentials(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
+    public Credentials(String url, String username, String password,String key) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.key=key;
+    }
+
     public Credentials() {
     }
 
