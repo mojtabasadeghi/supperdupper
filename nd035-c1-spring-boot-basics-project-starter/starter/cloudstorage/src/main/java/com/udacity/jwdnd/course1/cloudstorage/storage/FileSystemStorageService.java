@@ -35,6 +35,14 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public boolean checkFileExistanse(String filename)
+    {
+        if ( (fileMapper.getfileByname(filename).size())>0)
+            return false;
+        else
+            return true;
+    }
+    @Override
     public void store(MultipartFile mfile,int userId) {
 
         try {

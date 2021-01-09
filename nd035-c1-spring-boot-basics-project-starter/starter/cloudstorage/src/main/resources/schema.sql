@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS FILES (
     contenttype VARCHAR,
     filesize VARCHAR,
     fk_userid INT,
-    filedata BLOB,
+    filedata mediumblob,
+    instime datetime,
     foreign key (fk_userid) references USERS(userid)
 );
 

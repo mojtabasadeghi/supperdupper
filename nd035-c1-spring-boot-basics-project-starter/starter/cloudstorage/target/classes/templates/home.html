@@ -25,6 +25,8 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
+
+
                         <form action="#" th:action="@{/home/fileupload}" enctype="multipart/form-data" method="POST">
                             <div class="container">
                                 <div class="row" style="margin: 1em;">
@@ -42,6 +44,10 @@
                                 </div>
                             </div>
                         </form>
+
+                        <div id="error-msg" th:if="${repeatcheck}" class="alert alert-danger" >
+                            The repeated file cannot be added.
+                        </div>
 
                         <form method="get" th:action="@{/home/fileupload}">
                         <div class="table-responsive">

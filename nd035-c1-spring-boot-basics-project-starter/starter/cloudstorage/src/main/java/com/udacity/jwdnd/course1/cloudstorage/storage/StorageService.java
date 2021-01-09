@@ -25,6 +25,8 @@ public interface StorageService {
 
     File loadSingleFile(int fileid);
 
+    boolean checkFileExistanse(String filename);
+
     void deleteAll();
 
     void deleteById(int fileId);

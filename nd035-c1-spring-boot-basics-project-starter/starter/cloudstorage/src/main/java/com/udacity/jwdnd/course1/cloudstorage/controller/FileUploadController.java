@@ -64,10 +64,13 @@ public class FileUploadController {
     @PostMapping()
     public String handleFileUpload(Authentication authentication, @RequestParam("fileUpload") MultipartFile file, RedirectAttributes redirectAttributes)
     {
-
-        storageService.store(file,userService.getUser(authentication.getName()).getUserId());
-        redirectAttributes.addFlashAttribute("message","You successfully uploaded " + file.getOriginalFilename() + "!");
-
+        if (!storageService.checkFileExistanse(file.getOriginalFilename()))
+            redirectAttributes.addFlashAttribute("repeatcheck", true);
+        else {
+            redirectAttributes.addFlashAttribute("repeatcheck", false);
+            storageService.store(file, userService.getUser(authentication.getName()).getUserId());
+            redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+        }
         return "redirect:/home";
     }
 

@@ -12,4 +12,10 @@ public class LoginController {
     public String loginView() {
         return "login";
     }
+
+    @GetMapping("/signupSuccess")
+    public String loginAfterSignUp()
+    {
+        return "redirect:/login?signupSuccess";
+    }
 }
