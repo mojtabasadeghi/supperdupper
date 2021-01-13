@@ -91,6 +91,13 @@ public class FileUploadController {
             redirectAttributes.addFlashAttribute("classmessage",errorMsgService.getClassErrorType());
             redirectAttributes.addFlashAttribute("fileNavErrorMeesage",errorMsgService.getZeroFileSize());
         }
+        else if (file.getSize()>20500000)
+        {
+
+            redirectAttributes.addFlashAttribute("repeatcheck", true);
+            redirectAttributes.addFlashAttribute("classmessage",errorMsgService.getClassErrorType());
+            redirectAttributes.addFlashAttribute("fileNavErrorMeesage",errorMsgService.getFileSizeLimitError());
+        }
 
         else {
 
